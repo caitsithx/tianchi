@@ -33,20 +33,19 @@ def unzip_files(zip_files, tgt_folder):
         logging.info('%s is unzipped.' % new_zip_file)
         os.remove(new_zip_file)
         logging.info('%s is deleted.' % new_zip_file)
-        break
 
 
 def unzip():
     train_zip_files = glob.glob(path.join(DL_DIR, "train*.zip"))
-    unzip_files(train_zip_files, BASE_DIR)
+    unzip_files(train_zip_files, path.join(BASE_DIR, "train"))
 
-    val_zip_files = glob(path.join(DL_DIR, "val*.zip"))
+    val_zip_files = glob.glob(path.join(DL_DIR, "val*.zip"))
     unzip_files(val_zip_files, path.join(BASE_DIR, "val"))
 
-    test_zip_files = glob(path.join(DL_DIR, "test*.zip"))
+    test_zip_files = glob.glob(path.join(DL_DIR, "test*.zip"))
     unzip_files(test_zip_files, path.join(BASE_DIR, "test"))
 
-    test2_zip_files = glob(path.join(DL_DIR, "test2*.zip"))
+    test2_zip_files = glob.glob(path.join(DL_DIR, "test2*.zip"))
     unzip_files(test2_zip_files, path.join(BASE_DIR, "test2"))
 
 
