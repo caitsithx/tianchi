@@ -8,9 +8,9 @@ MEAN_PIXEL_VALUE_NODULE = 41
 LUNA_SUBSET_START_INDEX = 0
 SEGMENTER_IMG_SIZE = 320
 
-ROOT_DIR = '/Users/xiaoliangl/Documents/codes/deeplearning'
-DL_DIR = ROOT_DIR + '/dl_data/tianchi'
-BASE_DIR = ROOT_DIR + '/data/tianchi'
+ROOT_DIR = '/home/caitsithx/deeplearning_workspace/'
+DL_DIR = ROOT_DIR + '/dl_data/tianchi/'
+BASE_DIR = ROOT_DIR + '/data/tianchi/'
 TRAIN_RAW_DIR = BASE_DIR + 'train/'
 VAL_RAW_DIR = BASE_DIR + 'val/'
 TEST_RAW_DIR = BASE_DIR + 'test2/'

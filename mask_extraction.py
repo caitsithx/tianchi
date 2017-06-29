@@ -123,8 +123,8 @@ df_val = pd.read_csv(CSV_DIR+"val/annotations.csv")
 df_node = df_node.dropna()
 df_val = df_val.dropna()
 
-train_file_list = glob(TRAIN_DIR+'*/*.mhd')
-val_file_list = glob(VAL_DIR+'*/*.mhd')
+train_file_list = glob(TRAIN_DIR+'*.mhd')
+val_file_list = glob(VAL_DIR+'*.mhd')
 
 #file_list.extend(val_file_list)
 print(len(train_file_list))
