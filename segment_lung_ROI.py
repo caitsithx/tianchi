@@ -8,8 +8,8 @@ from sklearn.cluster import KMeans
 
 import settings
 
-working_path = settings.BASE_DIR + 'tutorial_out/*'
-file_list = glob(working_path + "/images_*.npy")
+working_path = settings.BASE_DIR + 'tutorial_out/**'
+file_list = glob(working_path + "/images_*.npy", recursive=True)
 
 print("image number: %d" % len(file_list))
 
@@ -92,7 +92,7 @@ for img_file in file_list:
 #
 
 
-file_list = glob(working_path + "lungmask_*.npy")
+file_list = glob(working_path + "lungmask_*.npy", recursive=True)
 out_images = []  # final set of images
 out_nodemasks = []  # final set of nodemasks
 
