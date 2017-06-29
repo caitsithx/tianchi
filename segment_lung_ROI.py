@@ -11,6 +11,8 @@ import settings
 working_path = settings.BASE_DIR + 'tutorial_out/*'
 file_list = glob(working_path + "/images_*.npy")
 
+print("image number: %d" % len(file_list))
+
 for img_file in file_list:
     # I ran into an error when using Kmean on np.float16,
     # so I'm using np.float64 here
@@ -93,6 +95,9 @@ for img_file in file_list:
 file_list = glob(working_path + "lungmask_*.npy")
 out_images = []  # final set of images
 out_nodemasks = []  # final set of nodemasks
+
+print("lungmask number: %d" % len(file_list))
+
 for fname in file_list:
     print("working on file ", fname)
     imgs_to_process = np.load(fname.replace("lungmask", "images"))
