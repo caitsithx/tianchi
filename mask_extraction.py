@@ -88,23 +88,27 @@ Returns uint16 version
 # Looping over the image files
 #
 def extract_masks(df_node, file_list, output_path):
-    for fcount, img_file in enumerate(tqdm(file_list)):
-        seriesuid = img_file.split('/')[-1].split('.')[0]
-        print(seriesuid)
-        print(img_file)
-        mini_df = df_node[df_node[
-                              "seriesuid"] == seriesuid]  # get all nodules associate with file
-        if mini_df.shape[
-            0] > 0:  # some files may not have a nodule--skipping those
+    for file_count, img_file in enumerate(tqdm(file_list)):
+        series_uid = img_file.split('/')[-1].split('.')[0]
+        print("series_uid of image-%s is %s" % (img_file, series_uid))
+
+        # get all nodules associate with file
+        mini_df = df_node[df_node["seriesuid"] == series_uid]
+
+        # some files may not have a nodule--skipping those
+        # some images have several nodules?!
+        if mini_df.shape[0] > 0:
             # load the data once
             itk_img = sitk.ReadImage(img_file)
-            img_array = sitk.GetArrayFromImage(
-                itk_img)  # indexes are z,y,x (notice the ordering)
-            num_z, height, width = img_array.shape  # heightXwidth constitute the transverse plane
-            origin = np.array(
-                itk_img.GetOrigin())  # x,y,z  Origin in world coordinates (mm)
-            spacing = np.array(
-                itk_img.GetSpacing())  # spacing of voxels in world coor. (mm)
+            # indexes are z,y,x (notice the ordering)
+            img_array = sitk.GetArrayFromImage(itk_img)
+            # heightXwidth constitute the transverse plane
+            # num_z is channel num?
+            num_z, height, width = img_array.shape
+            # x,y,z  Origin in world coordinates (mm)
+            origin = np.array(itk_img.GetOrigin())
+            # spacing of voxel in world coordinates. (mm)
+            spacing = np.array(itk_img.GetSpacing())
             # go through all nodes (why just the biggest?)
             for node_idx, cur_row in mini_df.iterrows():
                 node_x = cur_row["coordX"]
@@ -114,21 +118,23 @@ def extract_masks(df_node, file_list, output_path):
                 # just keep 3 slices
                 imgs = np.ndarray([3, height, width], dtype=np.float32)
                 masks = np.ndarray([3, height, width], dtype=np.uint8)
-                center = np.array([node_x, node_y, node_z])  # nodule center
-                v_center = np.rint((
-                                   center - origin) / spacing)  # nodule center in voxel space (still x,y,z ordering)
-                for i, i_z in enumerate(np.arange(int(v_center[2]) - 1,
-                                                  int(v_center[2]) + 2).clip(0,
-                                                                             num_z - 1)):  # clip prevents going out of bounds in Z
+                # nodule center
+                center = np.array([node_x, node_y, node_z])
+                # nodule center in voxel space (still x,y,z ordering)
+                v_center = np.rint((center - origin) / spacing)
+                center_z = int(v_center[2])
+                indexes_z = np.arange(center_z - 1, center_z + 2)
+                # clip prevents going out of bounds in Z
+                for i, i_z in enumerate(indexes_z.clip(0, num_z - 1)):
                     mask = make_mask(center, diam, i_z * spacing[2] + origin[2],
                                      width, height, spacing, origin)
                     masks[i] = mask
                     imgs[i] = img_array[i_z]
                 np.save(os.path.join(output_path,
-                                     "images_{}_{}.npy".format(seriesuid, str(
+                                     "images_{}_{}.npy".format(series_uid, str(
                                          node_idx).zfill(4))), imgs)
                 np.save(os.path.join(output_path,
-                                     "masks_{}_{}.npy".format(seriesuid, str(
+                                     "masks_{}_{}.npy".format(series_uid, str(
                                          node_idx).zfill(4))), masks)
 
 
